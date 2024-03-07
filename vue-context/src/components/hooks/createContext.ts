@@ -1,7 +1,7 @@
 import type { InjectionKey, PropType } from 'vue'
 import { inject, provide } from 'vue'
 
-export type Scope<C = any> = { [scopeName: string]: [InjectionKey<C>, any][  ] } | undefined
+export type Scope<C = any> = { [scopeName: string]: [InjectionKey<C>, C][  ] } | undefined
 
 type ScopeHook = (scope: Scope) => { [__scopeProp: string]: Scope }
 interface CreateScope {
