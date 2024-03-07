@@ -1,7 +1,7 @@
 import type { InjectionKey, PropType } from 'vue'
 import { inject, provide } from 'vue'
 
-export type Scope<C = any> = { [scopeName: string]: [InjectionKey<C>, C][  ] } | undefined
+export type Scope<C = any> = { [scopeName: string]: [InjectionKey<C>, C][] } | undefined
 
 type ScopeHook = (scope: Scope) => { [__scopeProp: string]: Scope }
 interface CreateScope {
@@ -44,7 +44,7 @@ function createContextScope<T extends string>(scopeName: T, createContextScopeDe
 
       if (context)
         return context
-  
+
       if (ContextDefault !== undefined)
         return ContextDefault
 
@@ -99,8 +99,8 @@ function composeScopes(...scopes: CreateScope[]) {
   const baseScope = scopes[0]
   if (scopes.length === 1)
     return baseScope
- 
-    const createScope: CreateScope = () => {
+
+  const createScope: CreateScope = () => {
     const scopeHooks = scopes.map((createScope) => {
       return ({
         useScope: createScope(),
@@ -111,7 +111,7 @@ function composeScopes(...scopes: CreateScope[]) {
       const nextScopes = scopeHooks.reduce((nextScopes, { useScope, scopeName }) => {
         // We are calling a hook inside a callback which React warns against to avoid inconsistent
         // renders, however, scoping doesn't have render side effects so we ignore the rule.
-        const scopeProps = useScope(overrideScopes) 
+        const scopeProps = useScope(overrideScopes)
         const currentScope = scopeProps[`__scope${scopeName}`]
 
         return { ...nextScopes, ...currentScope }
